@@ -1,5 +1,5 @@
 module.exports = {
     publicPath: process.env.NODE_ENV === 'production'
-        ? '/throuz_resume/'
+        ? '/throuz.github.io/resume/'
         : '/'
 }
