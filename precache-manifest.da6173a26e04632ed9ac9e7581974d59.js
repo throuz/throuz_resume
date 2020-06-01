@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "d9d6b659292be94a2251",
+    "revision": "1f34f34254e3450c69bc",
     "url": "/throuz_resume/css/app.a992830c.css"
   },
   {
@@ -76,12 +76,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/throuz_resume/img/the_one.1a3fed79.png"
   },
   {
-    "revision": "0a3174bc86b9913eff5129750827b17d",
+    "revision": "994dba1511b502f8ebbeab9cceedeaac",
     "url": "/throuz_resume/index.html"
   },
   {
-    "revision": "d9d6b659292be94a2251",
-    "url": "/throuz_resume/js/app.c5c1c749.js"
+    "revision": "1f34f34254e3450c69bc",
+    "url": "/throuz_resume/js/app.ea6c851a.js"
   },
   {
     "revision": "509e19dd13796405dd01",
@@ -98,5 +98,9 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
     "url": "/throuz_resume/robots.txt"
+  },
+  {
+    "revision": "d4f7b15fc6edeaa8ca36f00437dfd42d",
+    "url": "/throuz_resume/service-worker.js"
   }
 ]);
