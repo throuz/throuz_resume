@@ -98,9 +98,5 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
     "url": "/throuz_resume/robots.txt"
-  },
-  {
-    "revision": "d4f7b15fc6edeaa8ca36f00437dfd42d",
-    "url": "/throuz_resume/service-worker.js"
   }
 ]);
