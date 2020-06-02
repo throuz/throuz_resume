@@ -1,7 +1,7 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f3722a97e9e4e44fd481",
-    "url": "/throuz_resume/css/app.3f9d4097.css"
+    "revision": "0981942880c71c35066a",
+    "url": "/throuz_resume/css/app.60b26c2d.css"
   },
   {
     "revision": "509e19dd13796405dd01",
@@ -72,16 +72,24 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/throuz_resume/images/icons/icon-96x96.png"
   },
   {
+    "revision": "c697f51a3feb1fcbe685f272b454ca9e",
+    "url": "/throuz_resume/img/message_board.c697f51a.png"
+  },
+  {
+    "revision": "caf810ba72855accdd222d9b3adc1957",
+    "url": "/throuz_resume/img/piano_website.caf810ba.png"
+  },
+  {
     "revision": "1a3fed79a66c35c6cc1a5d1d6ec026f0",
     "url": "/throuz_resume/img/the_one.1a3fed79.png"
   },
   {
-    "revision": "f7db1a3a533a3bfd5eea207c99c8ac72",
+    "revision": "483c6228f068197a8971325fd6fefb4e",
     "url": "/throuz_resume/index.html"
   },
   {
-    "revision": "f3722a97e9e4e44fd481",
-    "url": "/throuz_resume/js/app.df931534.js"
+    "revision": "0981942880c71c35066a",
+    "url": "/throuz_resume/js/app.08e21db2.js"
   },
   {
     "revision": "509e19dd13796405dd01",
