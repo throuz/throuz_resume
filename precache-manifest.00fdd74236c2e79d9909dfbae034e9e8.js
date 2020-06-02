@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "0981942880c71c35066a",
+    "revision": "5e5598ae1964af31cf5c",
     "url": "/throuz_resume/css/app.60b26c2d.css"
   },
   {
@@ -84,12 +84,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/throuz_resume/img/the_one.1a3fed79.png"
   },
   {
-    "revision": "483c6228f068197a8971325fd6fefb4e",
+    "revision": "3506ab9af59b6a9734fd682f65b5a442",
     "url": "/throuz_resume/index.html"
   },
   {
-    "revision": "0981942880c71c35066a",
-    "url": "/throuz_resume/js/app.08e21db2.js"
+    "revision": "5e5598ae1964af31cf5c",
+    "url": "/throuz_resume/js/app.d815d0dc.js"
   },
   {
     "revision": "509e19dd13796405dd01",
