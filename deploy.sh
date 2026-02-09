@@ -3,6 +3,12 @@
 # 發生錯誤時執行終止指令
 set -e
 
+# 刪除舊的打包結果，避免殘留舊檔案
+rm -rf dist
+
+# 清除 Vue CLI 快取，確保是最新編譯
+rm -rf node_modules/.cache
+
 # 打包編譯
 npm run build
 
