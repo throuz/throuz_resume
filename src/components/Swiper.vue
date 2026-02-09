@@ -1,19 +1,30 @@
 <template>
   <div class="carousel">
-    <div class="carousel-track" ref="track">
+    <div
+      class="carousel-viewport"
+      @touchstart="onTouchStart"
+      @touchend="onTouchEnd"
+      @mousedown="onMouseDown"
+      @mouseup="onMouseUp"
+      @mouseleave="onMouseLeave"
+    >
       <div
-        v-for="(slide, i) in slides"
-        :key="i"
-        class="carousel-slide"
-        :class="{ active: current === i }"
+        class="carousel-track"
+        :style="trackStyle"
       >
-        <a :href="slide.url" target="_blank" rel="noopener noreferrer">
-          <img :src="slide.img" alt="works" />
-          <div class="description">
-            <h3>{{ slide.title }}</h3>
-            <p>{{ slide.desc }}</p>
-          </div>
-        </a>
+        <div
+          v-for="(slide, i) in slides"
+          :key="i"
+          class="carousel-slide"
+        >
+          <a :href="slide.url" target="_blank" rel="noopener noreferrer">
+            <img :src="slide.img" alt="works" />
+            <div class="description">
+              <h3>{{ slide.title }}</h3>
+              <p>{{ slide.desc }}</p>
+            </div>
+          </a>
+        </div>
       </div>
     </div>
     <div class="carousel-pagination">
@@ -23,9 +34,9 @@
         type="button"
         class="bullet"
         :class="{ active: current === i }"
-        :aria-label="'Slide ' + (i + 1)"
+        :aria-label="'第 ' + (i + 1) + ' 張'"
         @click="goTo(i)"
-      ></button>
+      />
     </div>
   </div>
 </template>
@@ -36,6 +47,11 @@ export default {
   data() {
     return {
       current: 0,
+      timer: null,
+      touchStartX: 0,
+      touchEndX: 0,
+      mouseStartX: 0,
+      mouseEndX: 0,
       slides: [
         {
           url: 'https://throuz.github.io/group/',
@@ -52,40 +68,75 @@ export default {
       ]
     };
   },
-  mounted() {
-    const track = this.$refs.track;
-    if (track) {
-      track.addEventListener('scroll', this.onScroll);
+  computed: {
+    trackStyle() {
+      return {
+        transform: `translateX(-${this.current * 100}%)`
+      };
     }
-    this.timer = setInterval(() => {
-      this.current = (this.current + 1) % this.slides.length;
-      this.updateScroll();
-    }, 4000);
+  },
+  mounted() {
+    this.startTimer();
   },
   beforeDestroy() {
-    const track = this.$refs.track;
-    if (track) track.removeEventListener('scroll', this.onScroll);
-    if (this.timer) clearInterval(this.timer);
+    this.stopTimer();
   },
   methods: {
-    onScroll() {
-      const track = this.$refs.track;
-      if (!track || !track.children.length) return;
-      const scrollLeft = track.scrollLeft;
-      const slideWidth = track.children[0].offsetWidth;
-      const i = Math.round(scrollLeft / slideWidth);
-      this.current = Math.max(0, Math.min(i, this.slides.length - 1));
+    startTimer() {
+      this.stopTimer();
+      this.timer = setInterval(() => {
+        this.current = (this.current + 1) % this.slides.length;
+      }, 4000);
+    },
+    stopTimer() {
+      if (this.timer) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
     },
     goTo(i) {
       this.current = i;
-      this.updateScroll();
+      this.startTimer();
     },
-    updateScroll() {
-      this.$nextTick(() => {
-        const track = this.$refs.track;
-        if (!track || !track.children[this.current]) return;
-        track.children[this.current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-      });
+    next() {
+      this.current = (this.current + 1) % this.slides.length;
+      this.startTimer();
+    },
+    prev() {
+      this.current = this.current === 0 ? this.slides.length - 1 : this.current - 1;
+      this.startTimer();
+    },
+    onTouchStart(e) {
+      this.touchStartX = e.changedTouches ? e.changedTouches[0].screenX : e.touches[0].screenX;
+      this.stopTimer();
+    },
+    onTouchEnd(e) {
+      this.touchEndX = e.changedTouches ? e.changedTouches[0].screenX : e.touches[0].screenX;
+      this.handleSwipe();
+      this.startTimer();
+    },
+    onMouseDown(e) {
+      this.mouseStartX = e.clientX;
+      this.stopTimer();
+    },
+    onMouseUp(e) {
+      this.mouseEndX = e.clientX;
+      this.handleSwipe();
+      this.startTimer();
+    },
+    onMouseLeave() {
+      this.mouseEndX = this.mouseStartX;
+      this.startTimer();
+    },
+    handleSwipe() {
+      const dx = this.touchEndX ? this.touchEndX - this.touchStartX : this.mouseEndX - this.mouseStartX;
+      const threshold = 50;
+      if (dx < -threshold) this.next();
+      else if (dx > threshold) this.prev();
+      this.touchStartX = 0;
+      this.touchEndX = 0;
+      this.mouseStartX = 0;
+      this.mouseEndX = 0;
     }
   }
 };
@@ -94,42 +145,43 @@ export default {
 <style lang="scss" scoped>
 .carousel {
   width: 100%;
+  max-width: 900px;
   height: 625px;
+  margin: 0 auto;
   position: relative;
+}
+
+.carousel-viewport {
+  width: 100%;
+  height: 100%;
   overflow: hidden;
+  touch-action: pan-y pinch-zoom;
 }
 
 .carousel-track {
   display: flex;
   height: 100%;
-  scroll-snap-type: x mandatory;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
-  -webkit-overflow-scrolling: touch;
+  transition: transform 0.4s ease-out;
 }
 
 .carousel-slide {
-  flex: 0 0 50%;
-  scroll-snap-align: center;
-  scroll-snap-stop: always;
-  height: 90%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 10px solid #999;
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
   box-sizing: border-box;
+  border: 10px solid #999;
   padding: 0 5px;
 
   a {
+    display: block;
     height: 100%;
     width: 100%;
     text-decoration: none;
     color: #000;
     background-color: #fff;
-    display: block;
 
     img {
+      display: block;
       width: 100%;
       height: 65%;
       object-fit: cover;
@@ -138,6 +190,7 @@ export default {
     .description {
       width: 100%;
       height: 35%;
+      box-sizing: border-box;
 
       h3 {
         font-size: 25px;
@@ -149,7 +202,7 @@ export default {
       p {
         font-size: 20px;
         margin: 0;
-        padding: 0 60px;
+        padding: 0 20px;
       }
     }
   }
@@ -157,25 +210,32 @@ export default {
 
 .carousel-pagination {
   position: absolute;
-  bottom: 10px;
+  bottom: 16px;
   left: 0;
   right: 0;
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
+  pointer-events: none;
+}
 
-  .bullet {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: none;
-    background: rgba(255, 255, 255, 0.5);
-    cursor: pointer;
-    padding: 0;
+.carousel-pagination .bullet {
+  pointer-events: auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s;
 
-    &.active {
-      background: #fff;
-    }
+  &:hover {
+    background: rgba(255, 255, 255, 0.8);
+  }
+
+  &.active {
+    background: #fff;
   }
 }
 </style>
